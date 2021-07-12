@@ -1,0 +1,10 @@
+How to run the code:
+* Run CMD in the root folder "simpleobjecttracking":
+* Create a virtual environment: python3.7 -m venv simpleobjecttracking
+* activate the virtual environment: source simpleobjecttracking/bin/activate
+* after activating the virtual environment, use the following command to install the needed packages: pip3 install -r requirements.txt
+* run the tracker: python object_tracker.py --prototxt deploy.prototxt --model res10_300x300_ssd_iter_140000.caffemodel
+
+
+
+* the details must be added in the object_tracker.py file.
