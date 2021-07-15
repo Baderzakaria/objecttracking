@@ -15,9 +15,13 @@ import time
 import cv2
 import csv
 import threading
+import datetime
+import time
+
+
 from check_id import check_id
 from compare2csv import compare2csv
-import requests
+import urllib.request
 id = check_id()
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
@@ -42,13 +46,15 @@ print("[INFO] starting video stream...")
 vs = VideoStream(src=0).start()
 time.sleep(2.0)
 ids= {}
+today = datetime.date.today()
+
 # loop over the frames from the video stream
 while True:
 	# read the next frame from the video stream and resize it
 	frame = vs.read()
 	frame = imutils.resize(frame, width=400)
-
-	# if the frame dimensions are None, grab them
+	
+	seconds_since_midnight = time.time() - time.mktime(today.timetuple())	
 	if W is None or H is None:
 		(H, W) = frame.shape[:2]
 
@@ -70,10 +76,7 @@ while True:
 			# the object, then update the bounding box rectangles list
 			box = detections[0, 0, i, 3:7] * np.array([W, H, W, H])
 			rects.append(box.astype("int"))
-
-			#print "_________________"+ str(time.time())+ "\n"
 			t= time.time()
-			#post_to_DB(id,1)
 			# draw a bounding box surrounding the object so we can
 			# visualize it
 			(startX, startY, endX, endY) = box.astype("int")
@@ -99,18 +102,25 @@ while True:
 	# show the output frame
 	cv2.imshow("Frame", frame)
 	key = cv2.waitKey(1) & 0xFF
-	if time.time() % 60 == 0 :
-		#compare2csv()
+	if seconds_since_midnight > 86400:
+	# if the frame dimensions are None, grab them :
+		with open('dict.csv', 'w') as csv_file:  
+			writer = csv.writer(csv_file)
+			for key, value in ids.items():
+				value1 = value[0]
+				value2 = value[1]
+				writer.writerow([key, value1,value2])
+		compare2csv(id)
 		break
 	# if the `q` key was pressed, break from the loop
 	if key == ord("q"):
+		with open('dict.csv', 'w') as csv_file:  
+			writer = csv.writer(csv_file)
+			for key, value in ids.items():
+				value1 = value[0]
+				value2 = value[1]
+				writer.writerow([key, value1,value2])
+		compare2csv(id)
 		break
-with open('dict.csv', 'w') as csv_file:  
-	writer = csv.writer(csv_file)
-	for key, value in ids.items():
-		value1 = value[0]
-		value2 = value[1]
-  		writer.writerow([key, value1,value2])
-compare2csv()
 cv2.destroyAllWindows()
 vs.stop()
