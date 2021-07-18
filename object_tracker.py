@@ -22,7 +22,8 @@ import time
 from check_id import check_id
 from compare2csv import compare2csv
 import urllib.request
-id = check_id()
+#id = check_id()
+id_checked=False
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-p", "--prototxt", required=True,
@@ -101,6 +102,9 @@ while True:
 
 	# show the output frame
 	cv2.imshow("Frame", frame)
+	if id_checked==False:
+		id = check_id()
+		id_checked=True
 	key = cv2.waitKey(1) & 0xFF
 	if seconds_since_midnight > 86400:
 	# if the frame dimensions are None, grab them :
