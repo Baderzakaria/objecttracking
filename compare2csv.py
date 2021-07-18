@@ -21,11 +21,13 @@ def compare2csv(id):
             #time on php is 1000 time bigger then tome on python, so i had scale it down by ten__this if is to see the viewers who didnt last on the camera more then 10 seconds--long sto
              #   print row_i.split(",")[0] + "__a10__" + row_v.split(",")[1]
                 ids.append(row_i[2])
-                print(row_v)
+                #print(row_v)
+                #print("<10")
             elif float(row_i[0])/1000 >= float(row_v.split(",")[1]) and float(row_i[0])/1000<= float(row_v.split(",")[2]):
               #  print str(float(row_i.split(",")[0])/1000) + "__ab__" + row_v.split(",")[1] + " " + row_v.split(",")[2]
                 ids.append(row_i[2])
-                print(row_v)
+                #print(row_v)
+                #print(">10")
             #print float(row_i.split(",")[0])/1000 -float(row_v.split(",")[1])
     print(ids)
     for id in ids:
